@@ -1,3 +1,6 @@
+# Submission details
+wandb project: [https://wandb.ai/andrecb/nyc_airbnb](https://wandb.ai/andrecb/nyc_airbnb)
+github repo: [https://github.com/andrebittencourt/rental_price_prediction.git](https://github.com/andrebittencourt/rental_price_prediction.git)
 # Build an ML Pipeline for Short-Term Rental Prices in NYC
 You are working for a property management company renting rooms and properties for short periods of 
 time on various rental platforms. You need to estimate the typical price for a given property based 
