@@ -78,10 +78,17 @@ def go(config: DictConfig):
                 )
 
         if "data_split" in active_steps:
-            ##################
-            # Implement here #
-            ##################
-            pass
+            # Splits data into modeling and test
+            _ = mlflow.run(
+                f"{config['main']['components_repository']}/train_val_test_split",
+                "main",
+                parameters={
+                    "input":"clean_sample.csv:latest",
+                    "test_size": config['modeling']['test_size'],
+                    "random_seed": config['modeling']['random_seed'],
+                    "stratify_by": config['modeling']['stratify_by']
+                },
+            )
 
         if "train_random_forest" in active_steps:
 
@@ -94,18 +101,33 @@ def go(config: DictConfig):
             # step
 
             ##################
-            # Implement here #
+            _ = mlflow.run(
+                os.path.join(hydra.utils.get_original_cwd(), "src", "train_random_forest"),
+                "main",
+                parameters={
+                    "trainval_artifact": "trainval_data.csv:latest",
+                    "val_size": config['modeling']['test_size'],
+                    "random_seed": config['modeling']['random_seed'],
+                    "stratify_by": config['modeling']['stratify_by'],
+                    "rf_config": rf_config,
+                    "max_tfidf_features": config['modeling']['max_tfidf_features'],
+                    "output_artifact": 'random_forest_export'
+                },
+            )
             ##################
-
-            pass
 
         if "test_regression_model" in active_steps:
 
             ##################
-            # Implement here #
+            _ = mlflow.run(
+                f"{config['main']['components_repository']}/test_regression_model",
+                "main",
+                parameters={
+                    "mlflow_model": "random_forest_export:latest",
+                    "test_dataset": "test_data.csv:latest",
+                },
+            )
             ##################
-
-            pass
 
 
 if __name__ == "__main__":
